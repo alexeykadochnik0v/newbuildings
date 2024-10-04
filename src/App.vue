@@ -1,7 +1,6 @@
 <script setup>
 import Header from './components/Header.vue';
-import PropertyList from './components/PropertyList.vue';
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useOsTheme, darkTheme, lightTheme } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useThemeStore } from './stores/themeStore';
@@ -16,16 +15,44 @@ const $themeClass = computed(() => (isDark.value ? 'dark' : 'light'));
 // Определение темы на основе ОС
 const osTheme = useOsTheme();
 isDark.value = osTheme === 'dark';
+
+// Изменение класса у body в зависимости от темы
+watchEffect(() => {
+  if (isDark.value) {
+    document.body.classList.add('dark-theme');
+    document.body.classList.remove('light-theme');
+  } else {
+    document.body.classList.add('light-theme');
+    document.body.classList.remove('dark-theme');
+  }
+});
 </script>
 
 <template>
   <div :class="[$themeClass]">
-      <Header />
-      <PropertyList />
+    <Header />
+    <!-- Компоненты будут меняться в зависимости от маршрута -->
+    <router-view />
   </div>
 </template>
 
 <style>
+/* Цвета для темной и светлой тем */
+.light-theme {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-theme {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+body {
+  transition: background-color 0.3s ease;
+  /* Плавный переход между темами */
+}
+
 .light {
   --body-bg: #ffffff;
   --text-color: #000000;
@@ -38,32 +65,7 @@ isDark.value = osTheme === 'dark';
   --card-bg: #444444;
 }
 
-/* Применение фона и текста на уровне всего сайта */
-body,
-.n-layout {
-  background-color: var(--body-bg);
-  color: var(--text-color);
-}
-
-.center {
-  padding-left: calc(50% - 570px);
-  padding-right: calc(50% - 570px);
-}
-
-
-/* Стиль карточек в зависимости от темы */
-.n-card {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-}
-
-/* Пример стиля для контейнера с новостройками */
-.property-list {
-  background-color: var(--body-bg);
-  color: var(--text-color);
-}
-
-/* Стили для всего приложения */
+/* Стиль для всего приложения */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
