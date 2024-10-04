@@ -10,7 +10,7 @@
 
                 <!-- Преимущества новостройки -->
                 <div class="advantages">
-                    <n-h2>Преимущества новостройки</n-h2>
+                    <n-h3>Преимущества новостройки</n-h3>
                     <div class="advantages-columns">
                         <!-- Левая колонка -->
                         <div class="advantages-column">
@@ -119,5 +119,26 @@ const rightAdvantages = computed(() => property.value?.advantages.slice(Math.cei
 .advantages-column {
     flex: 1;
     text-align: left;
+}
+
+@media (max-width: 768px) {
+    .advantages-columns {
+        flex-direction: column;
+        /* Колонки будут одна под другой */
+        gap: 0;
+    }
+
+    .property-card {
+        padding: 0;
+    }
+
+    .property-title {
+        font-size: 24px;
+    }
+
+    .advantages-column {
+        width: 100%;
+        /* Колонки будут занимать всю ширину */
+    }
 }
 </style>

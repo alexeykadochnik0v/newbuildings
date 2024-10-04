@@ -4,6 +4,12 @@
       <n-layout>
         <n-layout-header>
           <div class="header">
+            <!-- Логотип слева с ссылкой на главную -->
+            <router-link to="/" class="logo">
+              <span class="icon">🏠</span>
+            </router-link>
+
+            <!-- Переключатель темы справа -->
             <div class="custom-switch" @click="toggleTheme">
               <div class="switch-button" :class="{ 'switch-on': isDark }">
                 <span v-if="isDark" class="icon">🌙</span>
@@ -14,7 +20,7 @@
         </n-layout-header>
         <n-layout-content>
           <div class="content">
-            <h1>Только лучшие новостройки</h1>
+            <h1 class="heading">Только лучшие новостройки</h1>
           </div>
         </n-layout-content>
       </n-layout>
@@ -27,6 +33,7 @@ import { computed } from 'vue';
 import { useOsTheme, darkTheme, lightTheme, NConfigProvider, NLayout, NLayoutHeader, NLayoutContent, NSpace } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useThemeStore } from '../stores/themeStore';
+import { useRouter } from 'vue-router';
 
 // Используем Pinia для хранения состояния темы
 const themeStore = useThemeStore();
@@ -69,7 +76,8 @@ const toggleTheme = () => {
 .header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  /* Пространство между логотипом и переключателем */
   padding: 16px;
   background-color: var(--body-bg);
   color: var(--text-color);
@@ -115,5 +123,32 @@ const toggleTheme = () => {
 
 .icon {
   font-size: 1.4rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.logo .icon {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin: 0;
+  }
+
+  .heading {
+    font-size: 32px;
+  }
+
+  .header {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 </style>
