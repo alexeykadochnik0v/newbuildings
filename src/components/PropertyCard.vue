@@ -42,5 +42,6 @@ defineProps({
     padding: 1rem;
     font-size: 1.2rem;
     font-weight: bold;
+    color: var(--text-color);
 }
 </style>

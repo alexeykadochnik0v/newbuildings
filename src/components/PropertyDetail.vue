@@ -31,6 +31,9 @@
                     </div>
                 </div>
             </n-card>
+
+            <!-- Компонент сравнения новостроек -->
+            <Comparison />
         </div>
     </n-config-provider>
 </template>
@@ -41,6 +44,7 @@ import { computed } from 'vue';
 import { usePropertyStore } from '../stores/propertyStore';
 import { useThemeStore } from '../stores/themeStore';
 import { NConfigProvider, NCard, NH2, NList, NListItem, darkTheme, lightTheme } from 'naive-ui';
+import Comparison from './Comparison.vue'; // Импортируем компонент Comparison
 
 // Получаем ID новостройки из маршрута
 const route = useRoute();
@@ -66,8 +70,12 @@ const imageUrl = computed(() => {
 const theme = computed(() => (themeStore.isDark ? darkTheme : lightTheme));
 
 // Делим преимущества на две части
-const leftAdvantages = computed(() => property.value?.advantages.slice(0, Math.ceil(property.value?.advantages.length / 2)));
-const rightAdvantages = computed(() => property.value?.advantages.slice(Math.ceil(property.value?.advantages.length / 2)));
+const leftAdvantages = computed(() =>
+    property.value?.advantages.slice(0, Math.ceil(property.value?.advantages.length / 2))
+);
+const rightAdvantages = computed(() =>
+    property.value?.advantages.slice(Math.ceil(property.value?.advantages.length / 2))
+);
 </script>
 
 <style scoped>

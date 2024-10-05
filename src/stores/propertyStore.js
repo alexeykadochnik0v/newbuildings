@@ -1,3 +1,4 @@
+// src/store/propertyStore.js
 import { defineStore } from 'pinia';
 
 export const usePropertyStore = defineStore('property', {
@@ -136,13 +137,13 @@ export const usePropertyStore = defineStore('property', {
             // Фильтруем новостройки по названию, если есть введённый текст
             return state.properties.filter((property) =>
                 property.title.toLowerCase().includes(query)
-            );
-        },
+        );
     },
-    actions: {
-        // Действие для изменения поискового запроса
-        setSearchQuery(query) {
-            this.searchQuery = query;
-        },
+},
+actions: {
+    // Действие для изменения поискового запроса
+    setSearchQuery(query) {
+        this.searchQuery = query;
     },
+},
 });

@@ -1,13 +1,22 @@
 <template>
     <div class="property-list center">
-        <!-- Поле поиска новостроек -->
-        <n-input :value="searchQuery" @input="onSearchInput" placeholder="Поиск новостроек..." class="search-input" />
+        <!-- Поле поиска новостроек для десктопа и мобилки -->
+        <n-input v-if="isDesktop" :value="searchQuery" @input="onSearchInput" placeholder="Поиск новостроек..."
+            class="search-input" />
+
+        <n-input v-else v-model:value="mobileSearchQuery" placeholder="Поиск новостроек..." class="search-input"
+            @keyup.enter="onMobileSearch">
+            <template #suffix>
+                <n-button @click="onMobileSearch" type="primary">Искать</n-button>
+            </template>
+        </n-input>
 
         <!-- Сетка для отображения новостроек -->
-        <n-grid :cols="gridColumns" :x-gap="16" :y-gap="16" responsive="screen">
+        <n-grid :cols="gridColumns" :x-gap="16" :y-gap="16" responsive="screen" class="property-grid">
             <n-grid-item v-for="property in filteredProperties" :key="property.id">
                 <!-- Компонент PropertyCard для каждой новостройки -->
-                <PropertyCard :title="property.title" :imageUrl="getImageUrl(property.imageUrl)" :propertyId="property.id" />
+                <PropertyCard :title="property.title" :imageUrl="getImageUrl(property.imageUrl)"
+                    :propertyId="property.id" />
             </n-grid-item>
         </n-grid>
     </div>
@@ -16,27 +25,35 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { usePropertySearch } from '../composables/usePropertySearch';
-import { NGrid, NGridItem, NInput } from 'naive-ui';
+import { NGrid, NGridItem, NInput, NButton } from 'naive-ui';
 import PropertyCard from './PropertyCard.vue';
-import debounce from 'lodash/debounce';
 
 // Используем композиционную функцию для получения данных о поиске новостроек
 const { filteredProperties, searchQuery, setSearchQuery } = usePropertySearch();
 
-// Функция для обработки ввода в строку поиска с debounce для оптимизации
-const onSearchInput = debounce((value) => {
-    setSearchQuery(value);
-}, 30); // Задержка 30 мс
+// Переменная для хранения поискового запроса на мобилке
+const mobileSearchQuery = ref('');
 
-// Управляем количеством колонок в сетке в зависимости от ширины экрана
+// Определение, мобилка или десктоп
 const screenWidth = ref(window.innerWidth);
+const isDesktop = computed(() => screenWidth.value > 768);
 
 // Обновляем значение ширины экрана при изменении размеров окна
 window.addEventListener('resize', () => {
     screenWidth.value = window.innerWidth;
 });
 
-// Определяем количество колонок в сетке в зависимости от ширины экрана
+// Функция для обработки ввода на десктопе с debounce для оптимизации
+const onSearchInput = (value) => {
+    setSearchQuery(value);
+}; // Задержка 300 мс
+
+// Функция для обработки поиска на мобилке
+const onMobileSearch = () => {
+    setSearchQuery(mobileSearchQuery.value);
+};
+
+// Управление количеством колонок в сетке в зависимости от ширины экрана
 const gridColumns = computed(() => {
     if (screenWidth.value > 1024) return 4;
     if (screenWidth.value > 768) return 3;
@@ -78,6 +95,22 @@ const getImageUrl = (imageUrl) => {
 .search-input {
     width: 100%;
     padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-search {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.n-input>.n-input__suffix {
+    display: flex;
+    align-items: center;
+}
+
+.property-grid {
     margin-bottom: 2rem;
 }
 </style>
