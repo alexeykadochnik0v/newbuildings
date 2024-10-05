@@ -84,7 +84,7 @@ const rightAdvantages = computed(() =>
 }
 
 .property-card {
-    max-width: 800px;
+    max-width: 1140px;
     margin: 0 auto;
     padding: 16px;
     background-color: var(--body-bg);
@@ -110,7 +110,7 @@ const rightAdvantages = computed(() =>
 .property-image {
     width: 100%;
     height: auto;
-    max-height: 400px;
+    max-height: 600px;
     object-fit: cover;
 }
 
